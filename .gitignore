@@ -1,0 +1,26 @@
+# Worker secrets and build noise (web/ has its own .gitignore)
+worker/.env.worker
+worker/.env
+__pycache__/
+*.pyc
+.pytest_cache/
+*.pt
+.venv/
+
+node_modules/
+.next/
+out/
+dist/
+build/
+
+.env
+.env.*
+!.env.example
+
+*.pem
+*.key
+service-account*.json
+
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

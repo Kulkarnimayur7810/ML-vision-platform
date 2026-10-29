@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+:root {
+  --bg: #ffffff; --bg-subtle: #fafafa; --bg-muted: #f4f4f5; --bg-hover: #f0f0f2;
+  --border: #e4e4e7; --border-strong: #d4d4d8;
+  --fg: #18181b; --fg-muted: #52525b; --fg-subtle: #71717a;
+  --accent: #2f6f4e; --accent-fg: #ffffff; --accent-soft: #e7f2ec;
+  --danger: #b42318; --danger-soft: #fdecea; --warn: #9a6700; --warn-soft: #fff4d6; --ok: #1a7f37; --ok-soft: #e3f4e8;
+  --ring: #2f6f4e;
+}
+[data-theme=dark] {
+  --bg: #0b0b0d; --bg-subtle: #101013; --bg-muted: #17171b; --bg-hover: #1e1e23;
+  --border: #26262c; --border-strong: #3a3a42;
+  --fg: #ededf0; --fg-muted: #a1a1aa; --fg-subtle: #8b8b94;
+  --accent: #4ea67b; --accent-fg: #07130d; --accent-soft: #14281f;
+  --danger: #f97066; --danger-soft: #2c1513; --warn: #e5b341; --warn-soft: #2b2310; --ok: #55c576; --ok-soft: #12261a;
+  --ring: #4ea67b;
+}
+@theme inline {
+  --color-bg: var(--bg); --color-subtle: var(--bg-subtle); --color-muted: var(--bg-muted); --color-hover: var(--bg-hover);
+  --color-line: var(--border); --color-line-strong: var(--border-strong);
+  --color-fg: var(--fg); --color-fg-muted: var(--fg-muted); --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent); --color-accent-fg: var(--accent-fg); --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger); --color-danger-soft: var(--danger-soft); --color-warn: var(--warn); --color-warn-soft: var(--warn-soft);
+  --color-ok: var(--ok); --color-ok-soft: var(--ok-soft);
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius-md: 6px; --radius-lg: 8px;
+}
+html { color-scheme: light; }
+[data-theme=dark] { color-scheme: dark; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-sans); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 4px; }
+dialog { color: var(--fg); }
+dialog::backdrop { background: rgb(0 0 0 / 0.45); }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }

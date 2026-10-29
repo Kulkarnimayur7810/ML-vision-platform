@@ -1,0 +1,324 @@
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/README.md b/README.md[m
+[1mindex 0350e81..15d2fb4 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -1,459 +1,47 @@[m
+[31m-# WasteVision AI[m
+[32m+[m[32m# WasteVision AI — team platform[m
+ [m
+[31m-A collaborative computer-vision workspace for managing waste-image[m
+[31m-datasets, annotating objects, training and evaluating models, testing[m
+[31m-predictions, tracking experiments, and coordinating project work.[m
+[32m+[m[32mA private, login-only web platform for a small team building a computer-vision waste sorter:[m
+[32m+[m[32mdataset management, image annotation, YOLO training, evaluation, model registry, documentation and a shared Kanban board.[m
+ [m
+[31m-> **Project status:** This README describes the intended platform based[m
+[31m-> on the project specification. Actual feature availability depends on[m
+[31m-> the current repository and backend configuration. Do not treat a[m
+[31m-> feature as production-ready until it has been implemented and tested.[m
+[31m-[m
+[31m-## Contents[m
+[31m-[m
+[31m--   [Overview](#overview)[m
+[31m--   [Project goals](#project-goals)[m
+[31m--   [Planned workflow](#planned-workflow)[m
+[31m--   [Core modules](#core-modules)[m
+[31m--   [Technology and architecture](#technology-and-architecture)[m
+[31m--   [Getting started](#getting-started)[m
+[31m--   [Environment variables](#environment-variables)[m
+[31m--   [Authentication and privacy](#authentication-and-privacy)[m
+[31m--   [Dataset and annotation guidance](#dataset-and-annotation-guidance)[m
+[31m--   [Training and evaluation](#training-and-evaluation)[m
+[31m--   [Deployment](#deployment)[m
+[31m--   [Troubleshooting](#troubleshooting)[m
+[31m--   [Development guidelines](#development-guidelines)[m
+[31m--   [Roadmap](#roadmap)[m
+[31m--   [Contributing](#contributing)[m
+[31m--   [License](#license)[m
+[31m-[m
+[31m-## Overview[m
+[31m-[m
+[31m-WasteVision AI is designed to help a project team build and manage a[m
+[31m-computer-vision system for identifying waste, including small and[m
+[31m-fragmented waste pieces. The workspace brings dataset preparation, image[m
+[31m-annotation, model training, evaluation, prediction testing, experiment[m
+[31m-records, model versions, documentation, and team task management into[m
+[31m-one application.[m
+[31m-[m
+[31m-The broader project objective is to investigate identifying small waste[m
+[31m-fragments---potentially around **1--2 cm**---such as pieces of plastic,[m
+[31m-glass, metal, paper, and other waste. Actual minimum detectable size and[m
+[31m-accuracy depend on image resolution, camera distance, lighting, object[m
+[31m-visibility, dataset quality, and the trained model. These capabilities[m
+[31m-must be validated experimentally; they should not be assumed from the[m
+[31m-interface alone.[m
+[31m-[m
+[31m-## Project goals[m
+[31m-[m
+[31m--   Organize image datasets and dataset versions.[m
+[31m--   Label images and, where supported, draw object bounding boxes.[m
+[31m--   Validate annotations and prepare data for training.[m
+[31m--   Configure and monitor computer-vision training jobs.[m
+[31m--   Evaluate models with task-appropriate metrics.[m
+[31m--   Test predictions on new images or videos when supported.[m
+[31m--   Keep model checkpoints and experiment results associated with their[m
+[31m-    training runs.[m
+[31m--   Coordinate work through a shared team workspace and Kanban board.[m
+[31m--   Restrict project data to authenticated, authorized team members.[m
+[31m--   Provide a web interface that can be deployed independently of[m
+[31m-    long-running model-training workloads.[m
+[31m-[m
+[31m-## Planned workflow[m
+[31m-[m
+[31m-**Create dataset → Import images → Annotate → Validate dataset →[m
+[31m-Configure training → Train → Evaluate → Test predictions → Register[m
+[31m-model**[m
+[31m-[m
+[31m-Each step should use actual backend data and report clear loading,[m
+[31m-success, empty, and error states. A training job must not be shown as[m
+[31m-running unless the backend confirms it.[m
+[31m-[m
+[31m-## Core modules[m
+[31m-[m
+[31m-The following modules are part of the intended product scope. Confirm[m
+[31m-each module in the current repository before describing it as fully[m
+[31m-implemented.[m
+[31m-[m
+[31m-  -----------------------------------------------------------------------[m
+[31m-  Module                              Purpose[m
+[31m-  ----------------------------------- -----------------------------------[m
+[31m-  Overview                            Summarize real dataset, training,[m
+[31m-                                      model, and task activity.[m
+[31m-[m
+[31m-  Datasets                            Organize image collections,[m
+[31m-                                      versions, classes, splits, and[m
+[31m-                                      data-quality checks.[m
+[31m-[m
+[31m-  Annotation                          Assign labels and draw or review[m
+[31m-                                      bounding boxes for object-detection[m
+[31m-                                      datasets.[m
+[31m-[m
+[31m-  Training                            Configure model runs and view job[m
+[31m-                                      status, logs, metrics, and[m
+[31m-                                      checkpoints.[m
+[31m-[m
+[31m-  Evaluation                          Review metrics appropriate to the[m
+[31m-                                      model task and dataset split.[m
+[31m-[m
+[31m-  Test & Predict                      Run inference on new supported[m
+[31m-                                      inputs and inspect actual[m
+[31m-                                      predictions.[m
+[31m-[m
+[31m-  Experiments                         Compare runs, dataset versions,[m
+[31m-                                      configurations, and results.[m
+[31m-[m
+[31m-  Models                              Track checkpoints, model versions,[m
+[31m-                                      and their associated training runs.[m
+[31m-[m
+[31m-  Team Kanban                         Create, assign, prioritize, and[m
+[31m-                                      track project tasks.[m
+[31m-[m
+[31m-  Documentation                       Keep dataset instructions,[m
+[31m-                                      experiment notes, and team[m
+[31m-                                      decisions.[m
+[31m-[m
+[31m-  Team & Settings                     Manage membership, roles,[m
+[31m-                                      permissions, and workspace[m
+[31m-                                      preferences.[m
+[31m-  -----------------------------------------------------------------------[m
+[31m-[m
+[31m-### Classification versus object detection[m
+[31m-[m
+[31m--   **Image classification** predicts a category for an entire image. It[m
+[31m-    does not identify the location of each object within that image.[m
+[31m--   **Object detection** predicts both a category and a location,[m
+[31m-    commonly represented by a bounding box, for each detected object.[m
+[31m-[m
+[31m-If the goal is to locate several small waste fragments in one image, an[m
+[31m-object-detection approach and suitable bounding-box annotations are[m
+[31m-generally required. The final choice depends on the existing training[m
+[31m-pipeline and project requirements.[m
+[31m-[m
+[31m-## Technology and architecture[m
+[31m-[m
+[31m-The project specification calls for a web application with a persistent[m
+[31m-backend and a separate execution environment for long-running training[m
+[31m-jobs.[m
+[31m-[m
+[31m-The exact stack must be confirmed from the repository. The current[m
+[31m-project may use technologies such as:[m
+[31m-[m
+[31m--   **Frontend:** Next.js / React and TypeScript, if present in the[m
+[31m-    repository.[m
+[31m--   **Authentication and database:** Supabase or the existing configured[m
+[31m-    provider.[m
+[31m--   **Image storage:** A persistent object store or an explicitly[m
+[31m-    configured shared storage integration.[m
+[31m--   **Model training and inference:** The existing Python/ML pipeline or[m
+[31m-    a dedicated worker.[m
+[31m--   **Deployment:** Vercel for compatible web application components,[m
+[31m-    with training performed by suitable external compute when required.[m
+[31m-[m
+[31m-Do not assume that all of these integrations are already configured.[m
+[31m-Check `package.json`, environment-variable usage, database migrations,[m
+[31m-API routes, and training scripts before relying on them.[m
+[31m-[m
+[31m-## Getting started[m
+[31m-[m
+[31m-### Prerequisites[m
+[31m-[m
+[31m-Install the tools required by the actual repository. For a typical[m
+[31m-Next.js application, these commonly include:[m
+[31m-[m
+[31m--   Git[m
+[31m--   Node.js LTS and npm[m
+[31m--   Access to the configured database/authentication provider, if the[m
+[31m-    application requires one[m
+[31m--   Python and the ML dependencies only if running the training pipeline[m
+[31m-    locally[m
+[31m-[m
+[31m-### 1. Clone the repository[m
+[31m-[m
+[31m-Replace `<YOUR_GITHUB_USERNAME>` with the GitHub account or organization[m
+[31m-that owns the repository.[m
+[31m-[m
+[31m-``` bash[m
+[31m-git clone https://github.com/<YOUR_GITHUB_USERNAME>/WasteVision-AI.git[m
+[31m-cd WasteVision-AI[m
+ ```[m
+[31m-[m
+[31m-If you choose a different repository name on GitHub, use that URL[m
+[31m-instead.[m
+[31m-[m
+[31m-### 2. Install dependencies[m
+[31m-[m
+[31m-For an npm-based JavaScript project:[m
+[31m-[m
+[31m-``` bash[m
+[31m-npm install[m
+[31m-```[m
+[31m-[m
+[31m-### 3. Configure environment variables[m
+[31m-[m
+[31m-Create a local `.env.local` file if the application uses environment[m
+[31m-variables. Use `.env.example` as the reference when one is provided.[m
+[31m-[m
+[31m-``` bash[m
+[31m-# Example only — use the exact variable names required by this repository.[m
+[31m-# Never paste real credentials into README.md or commit them to Git.[m
+[32m+[m[32mweb/      Next.js app (UI + API). Deploys to Vercel.[m
+[32m+[m[32mworker/   Python worker. Runs training, evaluation, prediction and exports on a machine you control.[m
+[32m+[m[32mdocs/     Guides (start here ↓)[m
+ ```[m
+ [m
+[31m-The application may not start correctly until the required database and[m
+[31m-authentication values are configured. Do not invent missing values;[m
+[31m-obtain them from the project's actual provider settings.[m
+[31m-[m
+[31m-### 4. Run the development server[m
+[32m+[m[32m| Guide | For |[m
+[32m+[m[32m|---|---|[m
+[32m+[m[32m| [docs/LOCAL_DEV.md](docs/LOCAL_DEV.md) | Run everything on your own computer |[m
+[32m+[m[32m| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Put the website on Vercel + Supabase + object storage |[m
+[32m+[m[32m| [docs/WORKER.md](docs/WORKER.md) | Set up the machine that trains models |[m
+[32m+[m[32m| [docs/SECURITY.md](docs/SECURITY.md) | How access is controlled, and what is verified |[m
+[32m+[m[32m| [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Common problems |[m
+[32m+[m[32m| [docs/MIGRATION_FROM_STREAMLIT.md](docs/MIGRATION_FROM_STREAMLIT.md) | Relationship to the earlier Streamlit tool |[m
+ [m
+[31m-For a typical Next.js application:[m
+[32m+[m[32m## How it fits together[m
+ [m
+[31m-``` bash[m
+[31m-npm run dev[m
+ ```[m
+[31m-[m
+[31m-Open the local URL printed by the terminal (commonly[m
+[31m-`http://localhost:3000`).[m
+[31m-[m
+[31m-### 5. Run checks before publishing[m
+[31m-[m
+[31m-Use the scripts that actually exist in `package.json`. Common commands[m
+[31m-may include:[m
+[31m-[m
+[31m-``` bash[m
+[31m-npm run lint[m
+[31m-npm run build[m
+[32m+[m[32m browser ──► Vercel (Next.js: pages + API) ──► Postgres  ◄── worker (Python, your PC/GPU box)[m
+[32m+[m[32m                         │                                        │[m
+[32m+[m[32m                         └────────────► object storage ◄──────────┘   (images, checkpoints, exports)[m
+ ```[m
+ [m
+[31m-If a script is not defined, npm will report that it is missing. Check[m
+[31m-`package.json` rather than adding commands blindly. Test login,[m
+[31m-protected pages, dataset access, annotation saving, and any training[m
+[31m-workflow that is available.[m
+[32m+[m[32mThe website never trains models. It queues jobs in Postgres; a worker claims them, reports progress and[m
+[32m+[m[32mheartbeats, and stores results. With no worker running, jobs wait and the UI says so.[m
+ [m
+[31m-## Environment variables[m
+[32m+[m[32m## What is in the app[m
+ [m
+[31m-Create `.env.example` with **variable names and safe placeholders[m
+[31m-only**. The list below is illustrative; use the exact names expected by[m
+[31m-the codebase.[m
+[32m+[m[32mPrivate login (email + password only; no public sign-up, no email verification) · five server-enforced roles ·[m
+[32m+[m[32mteam Kanban with real multi-assignee tasks, subtasks, dependencies, saved views and workload · datasets with[m
+[32m+[m[32mduplicate/blur/brightness checks · annotation canvas (boxes or class labels) with review · frozen, leakage-aware[m
+[32m+[m[32mdataset versions · training wizard · per-epoch curves · evaluation labelled by split (train/val/test) ·[m
+[32m+[m[32mconfusion matrix and error analysis · Test & Predict · experiment comparison · model registry ·[m
+[32m+[m[32mMarkdown documentation with templates · in-app guide and glossary.[m
+ [m
+[31m-``` dotenv[m
+[31m-# Public client configuration (only values explicitly designed to be public)[m
+[31m-NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co[m
+[31m-NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_KEY[m
+[32m+[m[32m## Tests[m
+ [m
+[31m-# Server-only secrets (never expose these through NEXT_PUBLIC_* variables)[m
+[31m-DATABASE_URL=YOUR_DATABASE_CONNECTION_STRING[m
+[31m-SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVER_ONLY_SERVICE_ROLE_KEY[m
+[31m-[m
+[31m-# Add other variables only after confirming they are used by the application.[m
+ ```[m
+[31m-[m
+[31m-Important:[m
+[31m-[m
+[31m--   Do not commit `.env`, `.env.local`, private setup files, passwords,[m
+[31m-    access tokens, service-role keys, or production credentials.[m
+[31m--   A service-role key and database password must remain server-side.[m
+[31m--   Only include variables that the actual application needs. Remove[m
+[31m-    unused examples before treating this file as the project's[m
+[31m-    definitive configuration guide.[m
+[31m--   If the project uses another provider, replace these examples with[m
+[31m-    the correct provider's variable names.[m
+[31m-[m
+[31m-## Authentication and privacy[m
+[31m-[m
+[31m-The intended deployment is a **private team workspace**, not an open[m
+[31m-public dashboard.[m
+[31m-[m
+[31m-Before production use, verify that:[m
+[31m-[m
+[31m--   Login is required before private project pages can be accessed.[m
+[31m--   Backend APIs independently enforce authentication and authorization.[m
+[31m--   Database policies prevent one workspace from reading or changing[m
+[31m-    another workspace's records.[m
+[31m--   Image files, annotations, model checkpoints, and logs are not[m
+[31m-    exposed through public URLs unintentionally.[m
+[31m--   Team roles are enforced on the server, not only by hiding interface[m
+[31m-    controls.[m
+[31m--   Account creation is restricted to the project owner or authorized[m
+[31m-    administrators.[m
+[31m--   Passwords are handled by a secure authentication provider and are[m
+[31m-    never stored in plain text.[m
+[31m--   Secrets and private setup instructions are excluded from Git and[m
+[31m-    public build assets.[m
+[31m-[m
+[31m-A login screen alone does not make an application private. Validate[m
+[31m-access control on both the frontend and backend before sharing the[m
+[31m-deployed URL.[m
+[31m-[m
+[31m-## Dataset and annotation guidance[m
+[31m-[m
+[31m-For rel
